@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import hashlib
-
 donnees = [
             ['Amsterdam', '153.8.223.72'],
             ['Chennai', '169.38.84.49'],
@@ -21,14 +19,13 @@ donnees = [
             ['Washington DC', '50.87.60.166']
           ]
 
-tablehash = {}
+tablehash = [None]*8
 
 for donnee in donnees:
-    hash8 = str(hashlib.md5(donnee[1].encode('utf-8')).hexdigest())[0:8]
-    collision = False
-    while hash8 in tablehash:
-        collision = True
-        hash8 = str(hashlib.md5(hash8.encode('utf-8')).hexdigest())[0:8]
-    tablehash[hash8] = [donnee[0], donnee[1]]
+    hash8 = hash(donnee[1])%8
+    if (tablehash[hash8] is None):
+        tablehash[hash8] = {}        
+    tablehash[hash8][len(tablehash[hash8])] = [donnee[0], donnee[1]] 
 
-print (str(tablehash))
+for entree in tablehash:
+    print (str(entree))
